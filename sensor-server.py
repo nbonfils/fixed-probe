@@ -5,6 +5,7 @@ import os
 import sys
 from csv import DictWriter, DictReader
 from time import sleep
+from datetime import datetime
 
 
 # Constants
@@ -12,8 +13,8 @@ DATA_FILENAME = 'sensors_data.csv'
 PATH_TO_MEDIA = '/media/root'
 
 # Global variables
-need_to_export
-data_file_exists
+need_to_export = False
+data_file_exists = False
 
 
 def init():
@@ -59,7 +60,7 @@ def find_dev(path):
     for ent in dirents:
         found = False
         for subent in os.listdir(ent):
-            if subent == data_filename:
+            if subent == DATA_FILENAME:
                 dev = ent
                 data_file_exists = True
                 found = True
@@ -77,12 +78,12 @@ def write_data(data):
         Change 2 global variables to know where to write next  time
 
     Args:
-        data (list): The list containing the data for each parameter
+        data (dict): The dict containing the data for each parameter
 
     """
     global need_to_export
     global data_file_exists
-    fieldnames = ['time', 'date', 'air_temp', 'air_pressure', 'water_temp']
+    fieldnames = ['time', 'date']#, 'air_temp', 'air_pressure', 'water_temp']
     path = find_dev(PATH_TO_MEDIA)
 
     if path == '':
@@ -109,13 +110,13 @@ def write_data(data):
         if need_to_export:
             # Open the 2 files and transfer the data
             with open(DATA_FILENAME, 'r', newline='') as e, \
-                    open(path, 'w', newline='')  as f:
+                    open(path, 'r+', newline='')  as f:
                 reader = DictReader(e)
                 writer = DictWriter(f, fieldnames)
 
                 if data_file_exists:
                     # Append the transfered data
-                    f.seek(0, 2)
+                    f.seek(0, os.SEEK_END)
                 else:
                     # New data file will be created on device
                     writer.writeheader()
@@ -144,10 +145,31 @@ def write_data(data):
                     data_file_exists = True
 
 
+def get_data():
+    """Get the data from the sensors, also get the date and time
+
+    Returns:
+        dict: The data in the order of the fieldnames
+            [time, date, air_temp, air_pressure, water_temp]
+
+    """
+    # Date (DD-MM-YYY) and time (HH:MM:SS)
+    d = datetime.now()
+    time = '{:%H:%M:%S}'.format(d)
+    date = '{:%d-%m-%Y}'.format(d)
+
+    return {
+            'time' : time,
+            'date' : date
+            }
+
+
 def main():
     """The main function of the program"""
     init()
     while True:
+        data = get_data()
+        write_data(data)
         sleep(5)
     return 0
 
