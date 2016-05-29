@@ -91,13 +91,10 @@ def write_data(data):
         with open(DATA_FILENAME, 'a', newline='') as f:
             writer = DictWriter(f, fieldnames)
 
-            if need_to_export:
-                # If data file already exists on disk
-                writer.writerow(data)
-            else:
+            if not need_to_export:
                 # If data file will be created, add headers
                 writer.writeheader()
-                writer.writerow(data)
+            writer.writerow(data)
 
         # As written on disk data will need to be exported now
         need_to_export = True
@@ -110,14 +107,11 @@ def write_data(data):
         if need_to_export:
             # Open the 2 files and transfer the data
             with open(DATA_FILENAME, 'r', newline='') as e, \
-                    open(path, 'r+', newline='')  as f:
+                    open(path, 'a+', newline='')  as f:
                 reader = DictReader(e)
                 writer = DictWriter(f, fieldnames)
 
-                if data_file_exists:
-                    # Append the transfered data
-                    f.seek(0, os.SEEK_END)
-                else:
+                if not data_file_exists:
                     # New data file will be created on device
                     writer.writeheader()
                     data_file_exists = True
