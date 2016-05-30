@@ -6,6 +6,8 @@ import sys
 from csv import DictWriter, DictReader
 from time import sleep
 from datetime import datetime
+from w1thermsensor import W1ThermSensor
+from Adafruit_BMP.BMP085 import BMP085
 
 
 # Constants
@@ -83,7 +85,7 @@ def write_data(data):
     """
     global need_to_export
     global data_file_exists
-    fieldnames = ['time', 'date']#, 'air_temp', 'air_pressure', 'water_temp']
+    fieldnames = ['time', 'date', 'air_temp', 'air_pressure', 'water_temp']
     path = find_dev(PATH_TO_MEDIA)
 
     if path == '':
@@ -152,9 +154,28 @@ def get_data():
     time = '{:%H:%M:%S}'.format(d)
     date = '{:%d-%m-%Y}'.format(d)
 
+    # (DS18B) Water temperature
+    try:
+        w = W1ThermSensor()
+        water_temp = str(w.get_temperature())
+    except:
+        water_temp = '0'
+
+    # (BMP180) Air temperature + pressure
+    try:
+        b = BMP085()
+        air_temp = str(b.read_temperature())
+        air_pressure = str(b.read_pressure())
+    except:
+        air_temp = '0'
+        air_pressure = '0'
+
     return {
             'time' : time,
-            'date' : date
+            'date' : date,
+            'air_temp' : air_temp,
+            'air_pressure' : air_pressure,
+            'water_temp' : water_temp
             }
 
 
