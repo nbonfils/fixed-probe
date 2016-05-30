@@ -1,0 +1,13 @@
+# sensor-server unit (for systemd)
+#
+# Author: Nils Bonfils, 2016
+
+[Unit]
+Description=Server that writes measurments in /srv/sensors or on the media connected
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/sensor-server
+
+[Install]
+WantedBy=multi-user.target

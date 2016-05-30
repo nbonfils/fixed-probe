@@ -164,7 +164,7 @@ def main():
     while True:
         data = get_data()
         write_data(data)
-        sleep(5)
+        sleep(60)
     return 0
 
 if __name__ == "__main__":

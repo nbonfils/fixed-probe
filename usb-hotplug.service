@@ -1,0 +1,13 @@
+# usb-hotplug unit (for systemd)
+#
+# Author: Nils Bonfils, 2016
+
+[Unit]
+Description=Allow hotplug(automount) of usb device
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/udiskie -NF
+
+[Install]
+WantedBy=multi-user.target
