@@ -8,6 +8,7 @@ import os
 import RPi.GPIO as GPIO
 
 
+GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
 # change these as desired - they're the pins connected from the

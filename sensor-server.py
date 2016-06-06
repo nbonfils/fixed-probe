@@ -1,27 +1,56 @@
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
+"""Server that reads values from differents sensors.
 
+This script is a server that is supposed to run on a RPi with the
+adequate sensors hooked to it via GPIO.
+It reads the value of the sensors then store them on disk or on
+the usb drive if one is plugged, it also always export local data on
+the usb drive if there are local data.
+The measurements are stored in csv format in the file called :
+    "sensors_data.csv"
+either locally in "/srv/sensors/" or directly at the root of the usb.
+
+The sensors are:
+    BMP180 from adafruit : ambient temperature and barometric pressure
+    DS18B : water temperature
+    Turbidity Sensor (dishwasher) : turbidity of water
+
+It also records the time and date of the measure.
+
+"""
 import os
 import sys
 from csv import DictWriter, DictReader
 from time import sleep
 from datetime import datetime
+
 from w1thermsensor import W1ThermSensor
 from Adafruit_BMP.BMP085 import BMP085
+from turbsensor import TurbiditySensor
 
 
 # Constants
 DATA_FILENAME = 'sensors_data.csv'
 PATH_TO_MEDIA = '/media/root'
+MEASURE_INTERVAL = 60
 
 # Global variables
-need_to_export = False
-data_file_exists = False
+need_to_export = None
+data_file_exists = None
+turbidity_sensor = None
 
 
 def init():
-    """Initialize directory and check if export is needed."""
+    """Initialization for the server to run properly."""
     global need_to_export
+    global data_file_exists
+    global turbidity_sensor
+
+    # Don't know if data file exists yet
+    data_file_exists = False
+
+    # Init working directory
     os.chdir('/srv/sensors')
 
     # Check if a local file is to be exported
@@ -32,19 +61,26 @@ def init():
             need_to_export = True
             break
 
+    # Create and start the Turbidity Sensor thread on analog pin 0
+    pin = 0
+    mes_per_interval = 20
+    sleep = MEASURE_INTERVAL / mes_per_interval
+    turbidity_sensor = TurbiditySensor(pin, sleep)
+    turbidity_sensor.start()
+
 
 def find_dev(path):
-    """Find usb device absolute path
+    """Find usb device absolute path.
 
     Note:
         Also check if data already exists on device and update
-        global variable data_file_exists
+        global variable data_file_exists.
 
     Args:
-        path (str): The path to the dir where the device might be
+        path (str): The path to the dir where the device might be.
 
     Returns:
-        str: Full path to the correct usb device
+        str: Full path to the correct usb device.
 
     """
     global data_file_exists
@@ -74,19 +110,27 @@ def find_dev(path):
 
 
 def write_data(data):
-    """Write data in the file and eventually export the local file
+    """Write data in the file and eventually export the local file.
 
     Note:
-        Change 2 global variables to know where to write next  time
+        Change 2 global variables to know where to write next  time.
 
     Args:
-        data (dict): The dict containing the data for each parameter
+        data (dict): The dict containing the data for each parameter.
 
     """
     global need_to_export
     global data_file_exists
-    fieldnames = ['time', 'date', 'air_temp', 'air_pressure', 'water_temp']
+
     path = find_dev(PATH_TO_MEDIA)
+    fieldnames = [
+            'time', 
+            'date', 
+            'air_temp', 
+            'air_pressure', 
+            'water_temp',
+            'turb'
+            ]
 
     if path == '':
         # If there is no storage device, write on disk (sd card)
@@ -142,13 +186,22 @@ def write_data(data):
 
 
 def get_data():
-    """Get the data from the sensors, also get the date and time
+    """Get the data from the sensors, also get the date and time.
+
+    Data recorded:
+        time (str): the time of the record in HH:MM:SS format.
+        date (str): the date of the record in DD-MM-YYYY format.
+        air_temp (float): the ambient temperature in Celsius.
+        air_pressure (float): the barometric pressure in Pascal.
+        water_temp (float): the temperature of the water in Celsius.
+        turb (int): the analog value of the turbidity (from 0 to 1024).
 
     Returns:
-        dict: The data in the order of the fieldnames
-            [time, date, air_temp, air_pressure, water_temp]
+        dict: The data in the order of the fieldnames.
 
     """
+    global turbidity_sensor
+
     # Date (DD-MM-YYY) and time (HH:MM:SS)
     d = datetime.now()
     time = '{:%H:%M:%S}'.format(d)
@@ -170,22 +223,28 @@ def get_data():
         air_temp = '0'
         air_pressure = '0'
 
+    # Turbidity of the water
+    turb = turbidity_sensor.read_turbidity()
+    if turb > 1023:
+        turb = 0
+
     return {
             'time' : time,
             'date' : date,
             'air_temp' : air_temp,
             'air_pressure' : air_pressure,
-            'water_temp' : water_temp
+            'water_temp' : water_temp,
+            'turb' : turb
             }
 
 
 def main():
-    """The main function of the program"""
+    """The main function of the program."""
     init()
     while True:
         data = get_data()
         write_data(data)
-        sleep(60)
+        sleep(MEASURE_INTERVAL)
     return 0
 
 if __name__ == "__main__":
