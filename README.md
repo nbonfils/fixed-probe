@@ -74,6 +74,7 @@ The sensors connected to the _Raspberry Pi_ are :
 
 The _Raspberry Pi_ handles the sensors and gets the data from them, and then the data 
 has three possible ways to go.
+
 1. Network is available
 
    The datas will be sent through the GPRS with the HTTP protocol via the GET method 
