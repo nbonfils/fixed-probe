@@ -250,6 +250,13 @@ Once everything is done, reboot !
 sudo reboot
 ```
 
+Last thing to do after the reboot, to finish the sensors configuration.
+
+```bash
+sudo modprobe w1-gpio
+sudo modprobe w1-therm
+```
+
 So now the _Raspberry Pi_ is ready to get all the sensors working. The last thing to do 
 is to set up the server. Clone this repository first.
 
