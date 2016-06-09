@@ -22,13 +22,13 @@ things, there will be similarities too.
 
 You'll also need motivation and good will ! :)
 
-Feel free to contact me if you manage to get it working with different componoents, 
+Feel free to contact me if you manage to get it working with different components, 
 so these instructions can be improved and be more helpful. 
 
 ## The probe
 
 The core of the probe is a [Raspberry Pi][rpi] which will control the sensors and 
-handle the collect of the datas, then store/send it.
+handle the collect of the data, then store/send it.
 
 All the code in this repo was done on a raspberry pi under raspbian jessie lite. 
 The only compatibility issue with other OS might be the systemd units (.service files). 
@@ -67,8 +67,8 @@ The sensors connected to the _Raspberry Pi_ are :
 
    To take images of the water and have some visual feedback.
 
-   A basic usb webcam can be used. 
-   (I used a [LogiLink](http://logilink.com/showproduct/UA0072.htm) webcam)
+   A basic usb web-cam can be used. 
+   (I used a [LogiLink](http://logilink.com/showproduct/UA0072.htm) web-cam)
 
 ### Data collection
 
@@ -77,26 +77,26 @@ has three possible ways to go.
 
 1. Network is available
 
-   The datas will be sent through the GPRS with the HTTP protocol via the GET method 
-   to a server, which then can parse, process and even display the datas with a web 
+   The data will be sent through the GPRS with the HTTP protocol via the GET method 
+   to a server, which then can parse, process and even display the data with a web 
    interface. The image are sent via the PUT method.
 
 2. No network but a USB drive is plugged in
 
-   The datas are stored on the _USB root directory_ in the _CSV_ format in a file named 
-   *sensors_data.csv*. The images taken by the webcam are store in a directory named 
+   The data are stored on the _USB root directory_ in the _CSV_ format in a file named 
+   *sensors_data.csv*. The images taken by the web-cam are store in a directory named 
    *probe_img* in the _root directory_ of the USB and the images are called 
    YYYYMMDDHHMMSS.jpg according to the time they were taken.
 
 3. No network, no USB
 
    Everything is stored locally on the SD card of the _Raspberry PI_, thus being the file 
-   system of the OS that runs the _Raspberry Pi_. The datas are stored in 
+   system of the OS that runs the _Raspberry Pi_. The data are stored in 
    */srv/sensors/sensors_data.csv* and the images in */srv/sensors/probe_img/*.
 
 The data collection system works by level. This means that when the first level is 
 available everything will be done that way, otherwise it will use the second way, and the 
-worst is the third. And as soon as a higher level is avaible things are "transfered" to 
+worst is the third. And as soon as a higher level is available things are "transfered" to 
 this level. For example data are stored locally (3), but when an USB drive is available (2)
 everything will be dumped to it, and if it was network (1) everything that has been stored,
 since the network was unavailable, will be sent to the server.
@@ -114,7 +114,7 @@ is used along with a battery and a solar panel, so the probe can sustain longer 
 Also a [Witty Pi][witty_pi] can be used to improve even further the sustainability of the 
 probe. The [Witty Pi][witty_pi] is an extension module that will be used on the 
 _Raspberry Pi_ in order to shut it down to spare battery and to wake it up when there is a 
-need to get/store/send datas.
+need to get/store/send data.
 
 ### Other components
 
@@ -147,20 +147,20 @@ tip because of the wind, and hidden, so it don't get stolen. Temperature and tur
 sensors goes in the water, power up the _Raspberry Pi_ and then data should collected every
 10 min and sent to a server or stored on a USB drive.
 
-I suggest to run some tests before setting it up to seeif the behaviour is as expected.
+I suggest to run some tests before setting it up to see if the behaviour is as expected.
 
 ## Instructions to set up and build the probe
 
 It will be separated into two parts, the setting up and installations of software on 
 the _Raspberry Pi_ and the hook up of the circuits. The building part is left up to you
-as the boxes you may have chosen could differ a lot there are no real insructions to make
+as the boxes you may have chosen could differ a lot there are no real instructions to make
 holes in boxes and finding a way to fit everything in there, just try to keep everything
 as waterproof as possible.
 
 ### The Raspberry Pi
 
 At the very first what you want is to install a distribution on your _Raspberry Pi_,
-it's strongly suggested to download the iso of [Raspbian Jessi Lite][raspbian]. Then
+it's strongly suggested to download the iso of [Raspbian Jessie Lite][raspbian]. Then
 you'll just have to follow the instructions related to your system on 
 [this page][raspbian_install].
 
@@ -187,7 +187,7 @@ sudo apt-get upgrade
 
 This can take a little while, once done we can proceed with the installations. I will here
 just give the commands to enter as I will not enter into detailed explanations here.
-If you want to know more about what you're doing, take a look at some adafruit guides :
+If you want to know more about what you're doing, take a look at some Adafruit guides :
 + [Raspberry Pi setup][rpi_install]
 + [BMP180 setup][bmp_install]
 + [DS18B setup][ds18b_install]
@@ -290,7 +290,7 @@ the circuits and build the probe.
 
 ### Circuits hook up
 
-Here will be presented the hook up of the different components separatly.
+Here will be presented the hook up of the different components separately.
 
 Depending on the _Raspberry Pi_ model there are more or less pins, but the layout of the 
 pins are the same for the pins we are going to use. Here is the layout :
@@ -370,17 +370,17 @@ device, it's fairly simple.
 | TX  | RXD  |
 | RX  | TXD  |
 
-And that's it, everything should be hooked up, and if you lauch the server, everything 
+And that's it, everything should be hooked up, and if you launch the server, everything 
 should work fine. The *sensors_data.csv* should fill up with actual data. The last thing 
-to do if not already done is building the frame of the probe and fiting everything in.
+to do if not already done is building the frame of the probe and fitting everything in.
 
-## Bachelor poject
+## Bachelor project
 
 If you want to know more about how I've built such a probe myself, or if you're just 
 curious to learn more about this project, I invite you to go check the [wiki page][wiki] 
 of this project.
 
-Also If you're intersted in other Bio-tech stuff, I strongly recommend you to visit the 
+Also If you're interested in other Bio-tech stuff, I strongly recommend you to visit the 
 [Biodesign blog][biodesign] along with its [wiki][biodesign_wiki].
 
 [biodesign]: https://biodesign.cc/
