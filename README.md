@@ -6,7 +6,7 @@ and run your own probe for water monitoring.
 This work has been done by **Nils Bonfils** for his Bachelor project at 
 [EPFL](http://epfl.ch/) and is supervised by **Robin Scheibler**.
 
-This project takes part in a wider one, [the Biodesign project](https://biodesign.cc/). 
+This project takes part in a wider one, [the Biodesign project][biodesign]. 
 It was done within the [LCAV lab](http://lcav.epfl.ch/) at _EPFL_ and sponsored by it. The 
 [Hackuarium bio-hackerspace](http://www.hackuarium.ch/en/) also provided tools and a 
 place to work.
@@ -374,6 +374,16 @@ And that's it, everything should be hooked up, and if you lauch the server, ever
 should work fine. The *sensors_data.csv* should fill up with actual data. The last thing 
 to do if not already done is building the frame of the probe and fiting everything in.
 
+## Bachelor poject
+
+If you want to know more about how I've built such a probe myself, or if you're just 
+curious to learn more about this project, I invite you to go check the [wiki page][wiki] 
+of this project.
+
+Also If you're intersted in other Bio-tech stuff, I strongly recommend you to visit the 
+[Biodesign blog][biodesign] along with its [wiki][biodesign_wiki].
+
+[biodesign]: https://biodesign.cc/
 [bmp180]: https://www.adafruit.com/products/1603
 [rpi]: https://www.raspberrypi.org/
 [turb_sensor_img]: https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fshop.aftabrayaneh.com%2Fimage%2Fcache%2Fdata%2Farduino%2Fsensors%2FLight_Color%2FB1286%2FTurbidity_Sensor_B1286-500x500.jpg&f=1
@@ -393,3 +403,5 @@ to do if not already done is building the frame of the probe and fiting everythi
 [bmp_hook]: https://cdn-learn.adafruit.com/assets/assets/000/001/692/original/raspberry_pi_BMP085_Breadboard_1K.png
 [ds18b_hook]: https://cdn-learn.adafruit.com/assets/assets/000/003/782/original/learn_raspberry_pi_breadboard-probe.png
 [mcp_pins]: https://cdn-learn.adafruit.com/assets/assets/000/001/222/original/raspberry_pi_mcp3008pin.gif
+[wiki]: http://wiki.biodesign.cc/wiki/Fixed_Sensor
+[biodesign_wiki]: http://wiki.biodesign.cc/wiki/Main_Page
