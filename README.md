@@ -4,7 +4,7 @@ This is the repository containing all the code and instructions necessary to bui
 and run your own probe for water monitoring.
 
 This work has been done by **Nils Bonfils** for his Bachelor project at 
-[EPFL](http://epfl.ch/) and is supervised by **Robin Scheibler**.
+[EPFL](http://epfl.ch/) and is supervised by **Robin Scheibler** and **Sachiko Hirosue**.
 
 This project takes part in a wider one, [the Biodesign project][biodesign]. 
 It was done within the [LCAV lab](http://lcav.epfl.ch/) at _EPFL_ and sponsored by it. The 
